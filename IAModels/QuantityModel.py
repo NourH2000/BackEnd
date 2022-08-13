@@ -116,6 +116,8 @@ try:
     # Handling Categorical Features
     indexer = StringIndexer(inputCols=["affection", "age"], outputCols=[
                             "affection_indexes", "age_indexes"])
+
+                            
     df_r = indexer.setHandleInvalid("keep").fit(sparkdf).transform(sparkdf)
     # put the data into one vector
     featureassembler = VectorAssembler(inputCols=['id', 'fk', 'age_indexes', 'gender', 'affection_indexes',
