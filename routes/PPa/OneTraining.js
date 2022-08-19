@@ -57,6 +57,26 @@ router.get("/CountMedicamentSuspected/", (req, res) => {
     });
 });
 
+
+// find the ts of drugs suspected
+router.get("/CountTS/", (req, res) => {
+  const query =
+    "select ts  from ppa_result where id_entrainement = ?  ALLOW FILTERING ;";
+  const idEntrainement = req.query.idEntrainement;
+
+  client
+    .execute(query, [idEntrainement], { prepare: true })
+    .then((result) => {
+      console.log(result);
+      var ResultCountTs = result;
+      //The row is an Object with column names as property keys.
+      res.status(200).send(ResultCountTs?.rows);
+    })
+    .catch((err) => {
+      console.log("ERROR :", err);
+    });
+});
+
 // get count of each region By medication ( center , medication )
 router.get("/CountCenterSuspected/", (req, res) => {
   const query =

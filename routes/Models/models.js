@@ -23,7 +23,7 @@ router.get("/", (req, res) => {
   // PPA : 
 
 router.get("/getMaxdateP", (req, res) => {
-  const query = "SELECT MAX(date_paiment) as date_paiment_Max FROM ppa_source";
+  const query = "SELECT MAX(date_paiment) as date_paiment_Max FROM ppa_source;";
   try {
     client.execute(query, function (err, result) {
       var maxDate = result?.rows[0];
@@ -39,7 +39,7 @@ router.get("/getMaxdateP", (req, res) => {
   // Quantity : 
 
   router.get("/getMaxdateQ", (req, res) => {
-    const query = "SELECT MAX(date_paiment) as date_paiment_Max FROM quantity_source";
+    const query = "SELECT MAX(datent_Max FROM quantity_source";
     try {
       client.execute(query, function (err, result) {
         var maxDate = result?.rows[0];
