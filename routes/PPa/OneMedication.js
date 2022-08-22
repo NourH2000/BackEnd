@@ -61,15 +61,28 @@ router.get("/CountCenterSuspected/", (req, res) => {
 
 // get count of each region where center and num_enr without group By num_enr
 router.get("/CountOneCenterMedication/", (req, res) => {
-  const query =
-    "select *   from ppa_result where id_entrainement =? and region = ?  and num_enr=?    ALLOW FILTERING ;";
-
+  
   const idEntrainement = req.query.idEntrainement;
   const region = req.query.region;
   const NumEnR = req.query.NumEnR;
+  
+  if(req.query.region == 0){
+    console.log("am 0 ")
+    var query =
+    "select  *  from ppa_result where id_entrainement =?  and num_enr=?    ALLOW FILTERING ;";
+    var param = [idEntrainement, NumEnR ]
+  }else{
+    console.log("am not 0 ")
+    var query =
+    "select *   from ppa_result where id_entrainement =? and region = ?  and num_enr=?    ALLOW FILTERING ;";
+    var param = [idEntrainement, region ,NumEnR ]
+  }
+
+  
+ 
 
   client
-    .execute(query, [idEntrainement, region, NumEnR], { prepare: true })
+    .execute(query,param, { prepare: true })
     .then((result) => {
       console.log(result);
       var ResultCountPerPharmacy = result;

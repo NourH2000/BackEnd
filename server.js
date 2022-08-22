@@ -37,6 +37,8 @@ const DetailsOfMedicationQRoute = require("./routes/Quantity/OneMedication");
 const historiquePRoute = require("./routes/PPa/historique");
 const DetailsTrainingPRoute = require("./routes/PPa/OneTraining");
 const DetailsOfMedicationPRoute = require("./routes/PPa/OneMedication");
+const OverviewPRoute = require("./routes/PPa/Overview");
+
 
 // AppBar
 const NotificationRoute = require("./routes/AppBar/Notification");
@@ -57,6 +59,8 @@ app.use("/DetailsOfMedicationQ", DetailsOfMedicationQRoute);
 app.use("/historiqueP", historiquePRoute);
 app.use("/DetailsOfTrainingP", DetailsTrainingPRoute);
 app.use("/DetailsOfMedicationP", DetailsOfMedicationPRoute);
+app.use("/overviewP", OverviewPRoute);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
