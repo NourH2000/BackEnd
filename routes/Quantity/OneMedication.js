@@ -41,7 +41,7 @@ router.get("/OneMedication/", (req, res) => {
 // find the nomber of assurée suspected in one medication
 router.get("/CountAssuresSuspected/", (req, res) => {
   const query =
-    "select count(*) as count_assure , no_assure , num_enr , age , gender , affection from quantity_assure where id_entrainement = ? and num_enr = ?  group by no_assure ALLOW FILTERING ;";
+    "select count(*) as count_assure , no_assure , num_enr , age , gender , affection , region from quantity_assure where id_entrainement = ? and num_enr = ?  group by no_assure ALLOW FILTERING ;";
   const idEntrainement = req.query.idEntrainement;
   const numEnr = req.query.numEnr;
 
@@ -147,6 +147,30 @@ router.get("/CountAgeOneMedication/", (req, res) => {
     });
 });
 
+
+// get ts
+router.get("/TsOneMedication/", (req, res) => {
+  const query =
+    "select ts from Quantity_result where id_entrainement =? and num_enr=?    ALLOW FILTERING ;";
+
+  const idEntrainement = req.query.idEntrainement;
+  const numEnr = req.query.numEnr;
+
+  client
+    .execute(query, [idEntrainement, numEnr], { prepare: true })
+    .then((result) => {
+      var ResultCountPerAssure = result;
+      //The row is an Object with column names as property keys.
+      res.status(200).send(ResultCountPerAssure?.rows);
+    })
+    .catch((err) => {
+      res.status(400).send("err");
+      console.log("ERROR :", err);
+    });
+});
+
+
+
 // get age , gender
 router.get("/CountAgeGenderOneMedication/", (req, res) => {
   const query =
@@ -216,15 +240,25 @@ router.get("/CountCenterMedication/", (req, res) => {
 
 // get count of each region ( region => num_enr ) where center
 router.get("/CountOneCenterMedication/", (req, res) => {
-  const query =
-    "select *   from Quantity_result where id_entrainement =? and region = ?  and num_enr=?    ALLOW FILTERING ;";
 
   const idEntrainement = req.query.idEntrainement;
   const region = req.query.region;
   const NumEnR = req.query.NumEnR;
+  
+  if(req.query.region == 0){
+    console.log("am 0 ")
+    var query =
+    "select  *  from Quantity_result where id_entrainement =?  and num_enr=?    ALLOW FILTERING ;";
+    var param = [idEntrainement, NumEnR ]
+  }else{
+    var query =
+    "select *   from Quantity_result where id_entrainement =? and region = ?  and num_enr=?    ALLOW FILTERING ;";
+
+    var param = [idEntrainement, region ,NumEnR ]
+  }
 
   client
-    .execute(query, [idEntrainement, region, NumEnR], { prepare: true })
+    .execute(query, param, { prepare: true })
     .then((result) => {
       console.log(result);
       var ResultCountPerAssure = result;
