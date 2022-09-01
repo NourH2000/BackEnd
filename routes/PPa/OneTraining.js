@@ -183,9 +183,9 @@ router.get("/CountOneCenterMedication/", (req, res) => {
     .execute(query, param, { prepare: true })
     .then((result) => {
       console.log(result);
-      var ResultCountPerAssure = result;
+      var ResultCountPerRegion = result;
       //The row is an Object with column names as property keys.
-      res.status(200).send(ResultCountPerAssure?.rows);
+      res.status(200).send(ResultCountPerRegion?.rows);
     })
     .catch((err) => {
       res.status(400).send("err");

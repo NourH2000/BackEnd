@@ -146,8 +146,8 @@ router.get("/CountCenterSuspected/", (req, res) => {
 // get count of each region ( region => num_enr )
 router.get("/CountCenterMedication/", (req, res) => {
   const query =
-    "select num_enr , region from Quantity_result where id_entrainement =?    ALLOW FILTERING ;";
-
+    "select num_enr , region   from quantity_result where id_entrainement =?    ALLOW FILTERING ;";
+    
   const idEntrainement = req.query.idEntrainement;
 
   client
@@ -166,19 +166,30 @@ router.get("/CountCenterMedication/", (req, res) => {
 
 // get count of each region ( region => num_enr ) where center
 router.get("/CountOneCenterMedication/", (req, res) => {
-  const query =
-    "select count(*) , num_enr    from Quantity_result where id_entrainement =? and region = ? group by num_enr      ALLOW FILTERING ;";
 
   const idEntrainement = req.query.idEntrainement;
   const region = req.query.region;
+  console.log("am here ")
+  if(req.query.region == 0){
+
+    var query =
+    "select count(*) , num_enr   from Quantity_result where id_entrainement =?  group by num_enr  ALLOW FILTERING ;";
+    var param = [idEntrainement]
+    console.log("am here ")
+  }else{
+    console.log("am here ")
+    var query =
+    "select count(*) , num_enr   from Quantity_result where id_entrainement =? and region = ?  group by num_enr  ALLOW FILTERING ;"
+    var param = [idEntrainement, region]
+  }
 
   client
-    .execute(query, [idEntrainement, region], { prepare: true })
+    .execute(query,param, { prepare: true })
     .then((result) => {
       console.log(result);
-      var ResultCountPerAssure = result;
+      var ResultCountPerRegion = result;
       //The row is an Object with column names as property keys.
-      res.status(200).send(ResultCountPerAssure?.rows);
+      res.status(200).send(ResultCountPerRegion?.rows);
     })
     .catch((err) => {
       res.status(400).send("err");

@@ -49,7 +49,7 @@ try:
     type_training = 2
     status = 0
 
-    query = "INSERT INTO History (id , date , status , type, date_debut , date_fin) VALUES (%s, %s ,%s ,%s,%s ,%s) "
+    query = "INSERT INTO history_treatement (id , date , status , type, date_debut , date_fin) VALUES (%s, %s ,%s ,%s,%s ,%s) "
     addToHistory = session.execute(
         query, [id_training, today, status, type_training, today, today])
 
@@ -314,7 +314,7 @@ try:
     # set the status of the training = 1 ( success)
     success = 1
 
-    query_success = "UPDATE History SET status ={}  WHERE id ={} and type = 2 ;".format(
+    query_success = "UPDATE history_treatement SET status ={}  WHERE id ={} and type = 2 ;".format(
         success, id_training)
     session.execute(query_success)
 
@@ -335,7 +335,7 @@ except Exception as e:
     # set the status of the training = -1 ( failed)
     faild = -1
 
-    query_success = "UPDATE History SET status ={} WHERE id ={} and type = 2 ;".format(
+    query_success = "UPDATE history_treatement SET status ={} WHERE id ={} and type = 2 ;".format(
         faild, id_training)
     session.execute(query_success)
 

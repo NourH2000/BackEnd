@@ -21,7 +21,7 @@ const client = new cassandra.Client({
 
 // get all the History Of Training
 router.get("/ByTraining", (req, res) => {
-  const query = "SELECT * FROM History where type = ? ALLOW FILTERING  ;";
+  const query = "SELECT * FROM history_treatement where type = ? ALLOW FILTERING  ;";
   const type = 1;
 
   client

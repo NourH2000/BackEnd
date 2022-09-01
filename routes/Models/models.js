@@ -39,7 +39,7 @@ router.get("/getMaxdateP", (req, res) => {
   // Quantity : 
 
   router.get("/getMaxdateQ", (req, res) => {
-    const query = "SELECT MAX(datent_Max FROM quantity_source";
+    const query = "SELECT MAX(date_paiment) as date_paiment_Max FROM quantity_source";
     try {
       client.execute(query, function (err, result) {
         var maxDate = result?.rows[0];
@@ -87,7 +87,7 @@ router.get("/getMindateP", (req, res) => {
   
 
 //call a model ( quantitymodel)
-router.post("/quantitymodel", (req, res) => {
+router.post("/QuantityTraitement", (req, res) => {
   const date_debut = req.body.date_debut;
   const date_fin = req.body.date_fin;
 
@@ -96,7 +96,7 @@ router.post("/quantitymodel", (req, res) => {
     //replace this dates with the ones you will receive from req.body
     args: [date_debut, date_fin],
   };
-  const path = "IAModels/QuantityModel.py";
+  const path = "IAModels/QuantityTraitement.py";
   try {
     pythonShellScript(path, options);
     console.log("hello am a quantity model ");
@@ -111,7 +111,7 @@ router.post("/quantitymodel", (req, res) => {
 ////*********/////
 
 //call a model ( PPaModel)
-router.post("/ppamodel", (req, res) => {
+router.post("/PrixppaTraitement", (req, res) => {
   const date_debut = req.body.date_debut;
   const date_fin = req.body.date_fin;
 
@@ -120,7 +120,7 @@ router.post("/ppamodel", (req, res) => {
     //replace this dates with the ones you will receive from req.body
     args: [date_debut, date_fin],
   };
-  const path = "IAModels/PrixppaModel.py";
+  const path = "IAModels/PrixppaTraitement.py";
   try {
     pythonShellScript(path, options);
     console.log("hello am a ppa model ");
@@ -135,7 +135,7 @@ router.post("/ppamodel", (req, res) => {
 // get if the this training exists before
 router.get("/TestTraining", (req, res) => {
   const query =
-    "SELECT count(*) FROM History where type = ? and date_debut = ? and date_fin = ? and status = ? ALLOW FILTERING  ;";
+    "SELECT count(*) FROM history_treatement where type = ? and date_debut = ? and date_fin = ? and status = ? ALLOW FILTERING  ;";
   const type = req.query.type;
   const date_debut = req.query.date_debut;
   const date_fin = req.query.date_fin;
