@@ -19,7 +19,7 @@ try:
    from pyspark.sql.functions import split, col
 
    # new spark session
-   spark = SparkSession.builder.appName('Quantity model ').getOrCreate()
+   spark = SparkSession.builder.appName('Quantité Traitement ').getOrCreate()
 
    # connection to cassandra database and cnas keyspace
    cluster = Cluster(['127.0.0.1'])
@@ -48,7 +48,7 @@ try:
    # Increment the id of training
    session.execute("UPDATE params SET value = value + 1 WHERE param ='Max_Id_Tratement_Quantity' ;")
 
-   query = "SELECT *  FROM quantity_source  WHERE date_paiment >= '{}' AND date_paiment <= '{}' LIMIT 300 ALLOW FILTERING;".format(
+   query = "SELECT *  FROM quantity_source  WHERE date_paiment >= '{}' AND date_paiment <= '{}' LIMIT 3000 ALLOW FILTERING;".format(
    date_debut, date_fin)
    #query = "SELECT *  FROM quantity_source ALLOW FILTERING;"
    #query = "SELECT *  FROM quantity_trainingtmp where decision = 1 ALLOW FILTERING;"
@@ -397,7 +397,8 @@ try:
 
    # insert into notification
    # Message
-   msg = f'L\'entrainement {id_treatement} a été complété avec succès'
+   msg = f'Le traitement {id_treatement} a été complété avec succès'
+   ## 3 => entrainement quantity , 1 => traitement quantity , 2 => traitement PPA
    typeTraining = 1
    seen = 0
    status = 0
@@ -416,7 +417,8 @@ except Exception as e:
    session.execute(query_success)
 
       # Message
-   msg = f'L\'entrainement {id_treatement} a échoué'
+   msg = f'Le traitement {id_treatement} a échoué'
+   
    typeTraining = 1
    seen = 0
    status = 0

@@ -60,7 +60,7 @@ try:
     session.execute(
     "UPDATE params SET value = value + 1 WHERE param ='Max_Id_Entrainement_Ppa';")
 
-    query = "SELECT *  FROM ppa_source LIMIT 30000  ALLOW FILTERING  ;"
+    query = "SELECT *  FROM ppa_source LIMIT 111147  ALLOW FILTERING  ;"
     rows = session.execute(query)
 
     # transform the cassandra.cluster ( rows) to pandas dataframe to make some changes
@@ -321,6 +321,7 @@ try:
     # insert into notification
     # Message
     msg = f'The PPA training number {id_training} was completed successfully'
+    ## 3 => entrainement quantity , 1 => traitement quantity , 2 => traitement PPA
     typeTraining = 2
     seen = 0
     status = 1

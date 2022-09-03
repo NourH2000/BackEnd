@@ -265,4 +265,27 @@ router.get("/CountAssuresSuspectedAll/", (req, res) => {
       console.log("ERROR :", err);
     });
 });
+
+
+
+// get ts
+router.get("/TsOneTraining/", (req, res) => {
+  const query =
+    "select ts from Quantity_result where id_entrainement =?     ALLOW FILTERING ;";
+
+  const idEntrainement = req.query.idEntrainement;
+
+
+  client
+    .execute(query, [idEntrainement], { prepare: true })
+    .then((result) => {
+      var ResultCountPerAssure = result;
+      //The row is an Object with column names as property keys.
+      res.status(200).send(ResultCountPerAssure?.rows);
+    })
+    .catch((err) => {
+      res.status(400).send("err");
+      console.log("ERROR :", err);
+    });
+});
 module.exports = router;

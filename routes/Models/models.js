@@ -86,7 +86,26 @@ router.get("/getMindateP", (req, res) => {
   });
   
 
-//call a model ( quantitymodel)
+  //call a model ( quantitymodel)
+router.post("/QuantityTraining", (req, res) => {
+
+
+  var options = {
+    //scriptPath: '',
+    //replace this dates with the ones you will receive from req.body
+    args: [],
+  };
+  const path = "IAModels/QuantityEntraitement.py";
+  try {
+    pythonShellScript(path, options);
+    console.log("hello am a quantity model ");
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+
+//call traitement ( quantitymodel)
 router.post("/QuantityTraitement", (req, res) => {
   const date_debut = req.body.date_debut;
   const date_fin = req.body.date_fin;
@@ -99,7 +118,7 @@ router.post("/QuantityTraitement", (req, res) => {
   const path = "IAModels/QuantityTraitement.py";
   try {
     pythonShellScript(path, options);
-    console.log("hello am a quantity model ");
+    console.log("hello am a quantity Teatement ");
   } catch (err) {
     res.send(err);
   }
