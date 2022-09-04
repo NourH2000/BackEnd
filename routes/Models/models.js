@@ -19,16 +19,31 @@ router.get("/", (req, res) => {
   res.json({ toto: "models" });
 });
 
-//get the maximum dates : 
-  // PPA : 
+//get the max , min of  dates : 
 
-router.get("/getMaxdateP", (req, res) => {
-  const query = "SELECT MAX(date_paiment) as date_paiment_Max FROM ppa_source;";
+// max , min of ppa source 
+
+router.get("/getMinMaxdateP", (req, res) => {
+  const query = "SELECT MIN(date_paiment)  as date_paiment_min , MAX(date_paiment) as date_paiment_max from  ppa_source;";
   try {
     client.execute(query, function (err, result) {
-      var maxDate = result?.rows[0];
-      //The row is an Object with column names as property keys.
-      res.status(200).send(maxDate);
+      var maxDate = result?.rows[0].date_paiment_max;
+      var minDate = result?.rows[0].date_paiment_min;
+      res.status(200).send({maxDate , minDate});
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+// max , min of ppa source TMP
+
+ router.get("/getMaxdatePTMP", (req, res) => {
+  const query = "SELECT MIN(date_paiment)  as date_paiment_min , MAX(date_paiment) as date_paiment_max FROM ppa_source_TMP;";
+  try {
+    client.execute(query, function (err, result) {
+      var maxDate = result?.rows[0].date_paiment_max;
+      var minDate = result?.rows[0].date_paiment_min;
+      res.status(200).send({maxDate , minDate});
     });
   } catch (err) {
     console.log(err);
@@ -37,33 +52,30 @@ router.get("/getMaxdateP", (req, res) => {
 
 
   // Quantity : 
-
-  router.get("/getMaxdateQ", (req, res) => {
-    const query = "SELECT MAX(date_paiment) as date_paiment_Max FROM quantity_source";
+// max , min of qyantity source 
+router.get("/getMINMaxdateQ", (req, res) => {
+    const query = "SELECT MIN(date_paiment)  as date_paiment_min , MAX(date_paiment) as date_paiment_max FROM quantity_source";
     try {
       client.execute(query, function (err, result) {
-        var maxDate = result?.rows[0];
-        //The row is an Object with column names as property keys.
-        res.status(200).send(maxDate);
+        var maxDate = result?.rows[0].date_paiment_max;
+        var minDate = result?.rows[0].date_paiment_min;
+        res.status(200).send({maxDate,minDate});
       });
     } catch (err) {
       console.log(err);
     }
   });
 
+// max , min of quantity source TMP
 
-
-
-//get the minimum date
-
-  // PPA
-router.get("/getMindateP", (req, res) => {
-  const query = "SELECT MIN(date_paiment) as date_paiment_min FROM ppa_source ";
+router.get("/getMaxMindateQTMP", (req, res) => {
+  const query = "SELECT MIN(date_paiment)  as date_paiment_min , MAX(date_paiment) as date_paiment_max FROM quantity_source_TMP";
   try {
     client.execute(query, function (err, result) {
-      var minDate = result?.rows[0];
+      var maxDate = result?.rows[0].date_paiment_max;
+      var minDate = result?.rows[0].date_paiment_min;
       //The row is an Object with column names as property keys.
-      res.status(200).send(minDate);
+      res.status(200).send({minDate , maxDate});
     });
   } catch (err) {
     console.log(err);
@@ -71,20 +83,7 @@ router.get("/getMindateP", (req, res) => {
 });
 
 
-  // Quantity
-  router.get("/getMindateQ", (req, res) => {
-    const query = "SELECT MIN(date_paiment) as date_paiment_min FROM quantity_source ";
-    try {
-      client.execute(query, function (err, result) {
-        var minDate = result?.rows[0];
-        //The row is an Object with column names as property keys.
-        res.status(200).send(minDate);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  });
-  
+
 
   //call a model ( quantitymodel)
 router.post("/QuantityTraining", (req, res) => {
@@ -109,11 +108,12 @@ router.post("/QuantityTraining", (req, res) => {
 router.post("/QuantityTraitement", (req, res) => {
   const date_debut = req.body.date_debut;
   const date_fin = req.body.date_fin;
+  const auto = req.body.auto
 
   var options = {
     //scriptPath: '',
     //replace this dates with the ones you will receive from req.body
-    args: [date_debut, date_fin],
+    args: [date_debut, date_fin , auto],
   };
   const path = "IAModels/QuantityTraitement.py";
   try {
@@ -133,11 +133,13 @@ router.post("/QuantityTraitement", (req, res) => {
 router.post("/PrixppaTraitement", (req, res) => {
   const date_debut = req.body.date_debut;
   const date_fin = req.body.date_fin;
+  
 
+  const auto = req.body.auto;
   var options = {
     //scriptPath: '',
     //replace this dates with the ones you will receive from req.body
-    args: [date_debut, date_fin],
+    args: [date_debut, date_fin , auto],
   };
   const path = "IAModels/PrixppaTraitement.py";
   try {

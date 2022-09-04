@@ -17,8 +17,7 @@ try:
     from datetime import date
 
 
-    # In[3]:
-
+    
 
     # ouvrir une session spark
     spark = SparkSession.builder.appName('prixEx').getOrCreate()
@@ -33,9 +32,10 @@ try:
     # get parameters (start_date and end_date)
     date_debut = sys.argv[1]
     date_fin = sys.argv[2]
+    auto = sys.argv[3]
+  
 
-    # In[4]:
-
+    
 
     # connection to cassandra database and fraud keyspace
     session = cluster.connect('frauddetection')
@@ -51,16 +51,23 @@ try:
 
     query = "INSERT INTO history_treatement (id , date , status , type, date_debut , date_fin) VALUES (%s, %s ,%s ,%s,%s ,%s) "
     addToHistory = session.execute(
-        query, [id_training, today, status, type_training, today, today])
-
-
-    # In[46]:
+        query, [id_training, today, status, type_training, date_debut, date_fin])
 
 
     session.execute(
     "UPDATE params SET value = value + 1 WHERE param ='Max_Id_Entrainement_Ppa';")
 
-    query = "SELECT *  FROM ppa_source LIMIT 111147  ALLOW FILTERING  ;"
+    ## if the treatment by dates or auto ( all and just new data )
+    if (auto == 'Oui'):
+        query = "SELECT *  FROM ppa_source_TMP   ALLOW FILTERING  ;"
+        print("hello am an auto ")
+    else :
+        query = "SELECT *  FROM ppa_source  WHERE date_paiment >= '{}' AND date_paiment <= '{}' LIMIT 10  ALLOW FILTERING  ;".format(
+        date_debut, date_fin)
+        print("hello am not auto ")
+    
+    
+    
     rows = session.execute(query)
 
     # transform the cassandra.cluster ( rows) to pandas dataframe to make some changes
@@ -346,6 +353,7 @@ except Exception as e:
     typeTraining = 1
     seen = 0
     status = 0
+    queryNotification = "INSERT INTO notification (id  , id_entrainement , msg , seen , status , type ) VALUES (now() ,%s, %s ,%s , %s ,%s)"
 
     Notification = session.execute(
         queryNotification, [id_training, msg, seen, status,  typeTraining])

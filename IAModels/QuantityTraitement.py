@@ -30,6 +30,9 @@ try:
 
    date_debut = sys.argv[1]
    date_fin = sys.argv[2]
+   auto = sys.argv[3]
+ 
+     
 
    # connection to cassandra database and fraud keyspace
    session = cluster.connect('frauddetection')
@@ -48,8 +51,20 @@ try:
    # Increment the id of training
    session.execute("UPDATE params SET value = value + 1 WHERE param ='Max_Id_Tratement_Quantity' ;")
 
-   query = "SELECT *  FROM quantity_source  WHERE date_paiment >= '{}' AND date_paiment <= '{}' LIMIT 3000 ALLOW FILTERING;".format(
+
+
+   #if (auto == 'Oui'):  
+   #   query = "SELECT *  FROM quantity_source_TMP LIMIT 3000 ALLOW FILTERING;"
+   #else : 
+   #   query = "SELECT *  FROM quantity_source  WHERE date_paiment >= '{}' AND date_paiment <= '{}' LIMIT 3000 ALLOW FILTERING;".format(
+   #date_debut, date_fin)
+   if auto == "Non" :
+      query = "SELECT *  FROM quantity_source  WHERE date_paiment >= '{}' AND date_paiment <= '{}' LIMIT 3000 ALLOW FILTERING;".format(
    date_debut, date_fin)
+   else : 
+      query = "SELECT *  FROM quantity_source_TMP  ALLOW FILTERING;"
+
+
    #query = "SELECT *  FROM quantity_source ALLOW FILTERING;"
    #query = "SELECT *  FROM quantity_trainingtmp where decision = 1 ALLOW FILTERING;"
 
@@ -58,7 +73,7 @@ try:
    new_pd = dftable
    #Transformations
    ####### Deal with NULL values
-
+   print(new_pd)
    ## 1/ id : drop rows with NULL id's
    new_pd = new_pd[new_pd['id'].notna()]
 
@@ -422,6 +437,6 @@ except Exception as e:
    typeTraining = 1
    seen = 0
    status = 0
-
+   queryNotification = "INSERT INTO notification (id  , id_entrainement , msg , seen , status , type ) VALUES (now() ,%s, %s ,%s , %s ,%s)"
    Notification = session.execute(
    queryNotification, [id_treatement, msg, seen, status,  typeTraining])
