@@ -2,12 +2,18 @@ const express = require("express");
 const db = require("../../database");
 const router = express.Router();
 
-// database connection
 const cassandra = require("cassandra-driver");
+const { request } = require("express");
+
+const bcrypt = require('bcrypt')
+const saltRounds = 10
+
+
+
 const client = new cassandra.Client({
   contactPoints: ["127.0.0.1"],
   localDataCenter: "datacenter1",
-  keyspace: "user",
+  keyspace: "frauddetection",
 });
 
 // test request
@@ -19,7 +25,7 @@ router.get("/", (req, res) => {
 router.get("/AllUsers", async (req, res) => {
   console.log(req.user);
 
-  const query = "SELECT * FROM user";
+  const query = "SELECT * FROM users";
   try {
     client.execute(query, function (err, result) {
       var users = result;
@@ -33,19 +39,28 @@ router.get("/AllUsers", async (req, res) => {
 
 // add one user
 router.post("/AddUser", (req, res) => {
-  const { username, password } = req.body;
+  console.log("ho")
+  const { username, password } = req.query
   if (username && password) {
-    const query = "INSERT INTO user (username, pwd) VALUES(?, ?) ";
+
+    bcrypt.hash(password , saltRounds , (err, hash)=>{ 
+    const query = "INSERT INTO users (username, password) VALUES(?, ?) ";
+      
     client
-      .execute(query, [username, password])
+      .execute(query, [username, hash])
       .then((result) => {
         console.log(result);
 
         res.status(200).send({ msg: "created user successfully" });
+        console.log("created user successfully ");
       })
       .catch((err) => {
         console.log("ERROR :", err);
       });
+
+    })
+
+  
   }
 });
 

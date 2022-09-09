@@ -67,6 +67,7 @@ try:
         print("hello am not auto ")
     
     
+
     
     rows = session.execute(query)
 
@@ -336,6 +337,8 @@ try:
     Notification = session.execute(
         queryNotification, [id_training, msg, seen, status,  typeTraining])
 
+    if auto == "Oui" :
+       EmptyNewTable = session.execute("TRUNCATE table ppa_source_TMP ;")
 
 except Exception as e:
     print("An exception occurred")

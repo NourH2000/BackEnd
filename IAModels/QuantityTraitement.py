@@ -421,6 +421,10 @@ try:
    Notification = session.execute(
    queryNotification, [id_treatement, msg, seen, status,  typeTraining])
 
+   if auto == "Oui" :
+       EmptyNewTable = session.execute("TRUNCATE table quantity_source_TMP ;")
+
+
 except Exception as e:
    print("An exception occurred")
    print(e)
