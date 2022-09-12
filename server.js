@@ -1,25 +1,67 @@
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const local = require("./strategies/local");
 
 const app = express();
+
+//cors
+app.use(cors({
+  origin:["http://localhost:8000" , "http://localhost:3000"],
+  methods:["GET" , "POST"],
+  credentials: true
+
+}))
+//cookies 
+app.use(cookieParser());
+
+//bodyparser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+//session
+app.use(
+  session({
+    secret: "secret_code",
+    resave: true,
+    saveUninitialized: false,
+    cookie : {
+      expires : 60 * 60 * 24
+    }
+  })
+);
 
+
+
+
+
+
+/*
+app.use(cookieParser);
+app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cors({
+  //origin:["http://localhost:3000"],
+ // methods:["GET" , "POST"],
+  //credentials: true
+
+//}));
+app.use(cors())
 //session
 app.use(
   session({
     secret: "secret_code",
     cookie: { maxAge: 3000 },
-    resave: true,
+    resave: false,
     saveUninitialized: false,
+    cookie : {
+      expires : 60 * 60 * 24
+    }
+    
   })
 );
+*/
 
 
 /* les routes*/

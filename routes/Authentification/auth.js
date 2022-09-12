@@ -4,6 +4,10 @@ const router = express.Router();
 
 const cassandra = require("cassandra-driver");
 const { request } = require("express");
+const bodyParser = require("body-parser")
+//const expressSession = require("express-session")
+
+
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -33,7 +37,8 @@ router.post('/login', (req, res) => {
 
         bcrypt.compare(password ,result.rows[0].password , (err , response)=>{
           if(response){
-
+            req.session.user = result
+            console.log(req.session.user)
             res.status(200).send({ msg: "You are connected" , connected:1 });
           }else{
 
@@ -50,41 +55,13 @@ router.post('/login', (req, res) => {
 
 
 
-/* if(result.rowLength > 0){
-        bcrypt.compare(password , result[0].password , (err , response)=>{
-          if(response){
-            res.status(200).send({ msg: "You are connected" });
-            console.log("YES");
-          }else{
-            res.status(200).send({ msg: "Wrong pwd/usr" });
-            console.log("Wrong pwd/usr");
-          }
-        })
-        
-        
-
-      }else{
-        res.status(200).send({ msg: "User does not exist" });
-        console.log("User does not exist");
-
-      }
-    })
-    .catch((err) => {
-      console.log("ERROR :", err);
-    });*/
-/*
-if(result.length > 0){
-        console.log("you are looged in ")
-        res.status(200).send({ msg: "find user successfully" });
-      
-      }else{
-        console.log("Wrong username/password")
-        res.status(200).send({ msg: "user not find " });
-      }*/
-
-// test request
-router.get("/", (req, res) => {
-    res.json({ toto: "users" });
+// see if a user is a login 
+router.get("/login", (req, res) => {
+    if(req.session.user){
+      res.send({logedIn : true , user : req.session.user})
+    }else{
+      res.send({logedIn : false})
+    }
   });
 
 module.exports = router;

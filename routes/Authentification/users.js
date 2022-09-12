@@ -39,7 +39,7 @@ router.get("/AllUsers", async (req, res) => {
 
 // add one user
 router.post("/AddUser", (req, res) => {
-  console.log("ho")
+  
   const { username, password } = req.query
   if (username && password) {
 
