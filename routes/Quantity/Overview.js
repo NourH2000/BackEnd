@@ -20,24 +20,21 @@ router.get("/", (req, res) => {
   });
 
 
-  // get all the id of last training ( max )
-router.get("/MaxTrainingP", (req, res) => {
-    const query = "SELECT max(id_entrainement) as MaxId FROM ppa_result  ALLOW FILTERING   ;";
-  
-    client
-      .execute(query, [], { prepare: true })
-      .then((result) => {
-        var MaxIdPpa = result;
-        res.status(200).send(MaxIdPpa?.rows);
-      })
-      .catch((err) => {
-        console.log("ERROR :", err);
-      });
-  });
-  
-
-
-
+    // get all the id of last training ( max )
+    router.get("/MaxTrainingQ", (req, res) => {
+      const query = "SELECT max(id_entrainement) as MaxId FROM quantity_result  ALLOW FILTERING   ;";
+    
+      client
+        .execute(query, [], { prepare: true })
+        .then((result) => {
+          var MaxIdPpa = result;
+          res.status(200).send(MaxIdPpa?.rows);
+        })
+        .catch((err) => {
+          console.log("ERROR :", err);
+        });
+    });
+    
 
 
 module.exports = router;

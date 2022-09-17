@@ -34,36 +34,6 @@ app.use(
 );
 
 
-
-
-
-
-/*
-app.use(cookieParser);
-app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(cors({
-  //origin:["http://localhost:3000"],
- // methods:["GET" , "POST"],
-  //credentials: true
-
-//}));
-app.use(cors())
-//session
-app.use(
-  session({
-    secret: "secret_code",
-    cookie: { maxAge: 3000 },
-    resave: false,
-    saveUninitialized: false,
-    cookie : {
-      expires : 60 * 60 * 24
-    }
-    
-  })
-);
-*/
-
-
 /* les routes*/
 
 const authRouter = require("./routes/Authentification/auth");
@@ -74,6 +44,8 @@ const usersRoute = require("./routes/Authentification/users");
 const historiqueQRoute = require("./routes/Quantity/historique");
 const DetailsTrainingQRoute = require("./routes/Quantity/OneTraining");
 const DetailsOfMedicationQRoute = require("./routes/Quantity/OneMedication");
+const OverviewQRoute = require("./routes/Quantity/Overview");
+
 
 // PPa
 const historiquePRoute = require("./routes/PPa/historique");
@@ -96,6 +68,7 @@ app.use("/auth", authRouter);
 app.use("/historiqueQ", historiqueQRoute);
 app.use("/DetailsOfTrainingQ", DetailsTrainingQRoute);
 app.use("/DetailsOfMedicationQ", DetailsOfMedicationQRoute);
+app.use("/overviewQ", OverviewQRoute);
 
 // PPa
 app.use("/historiqueP", historiquePRoute);

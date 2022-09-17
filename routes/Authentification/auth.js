@@ -38,16 +38,17 @@ router.post('/login', (req, res) => {
         bcrypt.compare(password ,result.rows[0].password , (err , response)=>{
           if(response){
             req.session.user = result
-            console.log(req.session.user)
+            console.log("You are connected")
+            // Rahim Rahim
             res.status(200).send({ msg: "You are connected" , connected:1 });
           }else{
-
+            console.log("Wrong pwd/usr")
             res.status(200).send({ msg: "Wrong pwd/usr" ,  connected:0 });
           }
         })
 
       }else{
-        
+        console.log("user does not exist")
         res.status(200).send({ msg: "user does not exist" ,  connected:-1 });
 
       }})}})
