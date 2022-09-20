@@ -328,7 +328,7 @@ try:
 
     # insert into notification
     # Message
-    msg = f'The PPA training number {id_training} was completed successfully'
+    msg = f'Le traitement PPA n° {id_training} a été complété avec succès'
     ## 3 => entrainement quantity , 1 => traitement quantity , 2 => traitement PPA
     typeTraining = 2
     seen = 0
@@ -352,7 +352,7 @@ except Exception as e:
 
     # insert into notification
     # Message
-    msg = f'The training number {id_training} was completed successfully'
+    msg = f'Le traitement PPA n° {id_training} a échoué'
     typeTraining = 1
     seen = 0
     status = 0

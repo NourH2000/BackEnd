@@ -412,7 +412,7 @@ try:
 
    # insert into notification
    # Message
-   msg = f'Le traitement {id_treatement} a été complété avec succès'
+   msg = f'Le traitement n° {id_treatement} a été complété avec succès'
    ## 3 => entrainement quantity , 1 => traitement quantity , 2 => traitement PPA
    typeTraining = 1
    seen = 0
@@ -436,7 +436,7 @@ except Exception as e:
    session.execute(query_success)
 
       # Message
-   msg = f'Le traitement {id_treatement} a échoué'
+   msg = f'Le traitement n° {id_treatement} a échoué'
    
    typeTraining = 1
    seen = 0

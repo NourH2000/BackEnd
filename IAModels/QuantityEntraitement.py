@@ -295,7 +295,7 @@ except Exception as e:
    session.execute(query_success)
 
       # Message
-   msg = f'L\'entrainement {id_training} a échoué'
+   msg = f'L\'entrainement Quantité n° {id_training} a échoué'
    typeTraining = 3
    seen = 0
    status = 0

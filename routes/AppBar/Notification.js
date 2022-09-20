@@ -42,8 +42,8 @@ router.get("/NotificationData", (req, res) => {
   client
     .execute(query, [seen], { prepare: true })
     .then((result) => {
-      var historyOfTraining = result;
-      res.status(200).send(historyOfTraining?.rows);
+      var UnseenNotifications = result;
+      res.status(200).send(UnseenNotifications?.rows);
     })
     .catch((err) => {
       console.log("ERROR :", err);
@@ -57,28 +57,47 @@ router.get("/NotificationAllId", (req, res) => {
   client
     .execute(query, [seen], { prepare: true })
     .then((result) => {
-      var historyOfTraining = result;
-      res.status(200).send(historyOfTraining?.rows);
+      var idsOfUnseenNotification = result;
+      res.status(200).send(idsOfUnseenNotification?.rows);
     })
     .catch((err) => {
       console.log("ER0OR :", err);
     });
 });
 
-// get data of notifications unseen yet
+// update the status of notifications ==> unseen
 router.get("/NotificationUpdate", (req, res) => {
-  const query = "UPDATE notification SET seen =?  where id =? ;";
-  const seen = 1;
-  const id = req.query.id;
+  const query = "UPDATE notification SET seen =1  where id=? ;";
+  
+  const ids = (req.query.ids);
   client
-    .execute(query, [seen, id], { prepare: true })
+    .execute(query, [ids], { prepare: true })
     .then((result) => {
-      var historyOfTraining = result;
-      res.status(200).send(historyOfTraining?.rows);
+      var updatedNotification = result;
+      res.status(200).send(updatedNotification?.rows);
+    })
+    .catch((err) => {
+      console.log("ER0OR :", err);
+     
+    });
+});
+
+
+// get all notifications 
+router.get("/AllNotification", (req, res) => {
+  const query = "select msg , seen , status from notification ALLOW FILTERING;";
+
+  client
+    .execute(query, { prepare: true })
+    .then((result) => {
+      var allNoti = result;
+      res.status(200).send(allNoti?.rows);
     })
     .catch((err) => {
       console.log("ER0OR :", err);
     });
 });
+
+
 
 module.exports = router;
