@@ -84,20 +84,23 @@ router.get("/NotificationUpdate", (req, res) => {
 
 
 // get all notifications 
+
+
+
 router.get("/AllNotification", (req, res) => {
   const query = "select msg , seen , status from notification ALLOW FILTERING;";
 
   client
-    .execute(query, { prepare: true })
+    .execute(query)
     .then((result) => {
-      var allNoti = result;
-      res.status(200).send(allNoti?.rows);
+      var updatedNotification = result;
+      res.status(200).send(updatedNotification?.rows);
     })
     .catch((err) => {
       console.log("ER0OR :", err);
+     
     });
 });
-
 
 
 module.exports = router;

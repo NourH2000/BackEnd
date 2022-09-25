@@ -65,4 +65,26 @@ router.get("/login", (req, res) => {
     }
   });
 
+router.delete('/logout', (req, res) => {
+    console.log('ammmmmmmmmm here ')
+    if (req.session) {
+      req.session.destroy(err => {
+        if (err) {
+          res.status(400).send('Unable to log out')
+        } else {
+          res.status(200).send({msg : 'Logout successful' , connected : 0})
+        }
+      });
+    } else {
+      res.end()
+    }
+  })
+
+  // test
+router.get("/test", (req, res) => {
+
+    res.send({msg : 'just a test'})
+  
+});
+
 module.exports = router;
